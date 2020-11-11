@@ -9,6 +9,7 @@
 /*     */ import android.opengl.GLSurfaceView;
 /*     */ import android.os.Bundle;
 /*     */ import android.preference.PreferenceManager;
+/*     */ import android.support.annotation.NonNull;
 /*     */ import android.util.Log;
 /*     */ import android.view.Menu;
 /*     */ import android.view.MenuInflater;
@@ -18,7 +19,6 @@
 /*     */ import android.widget.FrameLayout;
 /*     */ import android.widget.ImageButton;
 /*     */ import android.widget.Toast;
-/*     */ import androidx.annotation.NonNull;
 /*     */ import com.ksxkq.mylibrary.R;
 /*     */ import org.artoolkitx.arx.arxj.camera.CameraAccessHandler;
 /*     */ import org.artoolkitx.arx.arxj.camera.CameraEventListener;
@@ -27,8 +27,6 @@
 /*     */ import org.artoolkitx.arx.arxj.camera.FrameListener;
 /*     */ import org.artoolkitx.arx.arxj.camera.FrameListenerImpl;
 /*     */ import org.artoolkitx.arx.arxj.rendering.ARRenderer;
-/*     */ 
-/*     */ 
 /*     */ 
 /*     */ 
 /*     */ 
@@ -117,28 +115,28 @@
 /*     */   private GLSurfaceView mGlView;
 /*     */   
 /*     */   public Context getAppContext() {
-/* 120 */     return this.mContext;
+/* 118 */     return this.mContext;
 /*     */   }
 /*     */ 
 /*     */   
 /*     */   @TargetApi(14)
 /*     */   protected void onCreate(Bundle savedInstanceState) {
-/* 126 */     super.onCreate(savedInstanceState);
+/* 124 */     super.onCreate(savedInstanceState);
 /*     */     
-/* 128 */     this.mContext = getApplicationContext();
-/*     */ 
-/*     */ 
-/*     */     
-/* 132 */     PreferenceManager.setDefaultValues((Context)this, R.xml.preferences, false);
-/*     */ 
-/*     */ 
+/* 126 */     this.mContext = getApplicationContext();
 /*     */ 
 /*     */ 
 /*     */     
-/* 138 */     setRequestedOrientation(0);
-/* 139 */     getWindow().addFlags(128);
+/* 130 */     PreferenceManager.setDefaultValues((Context)this, R.xml.preferences, false);
+/*     */ 
+/*     */ 
+/*     */ 
+/*     */ 
 /*     */     
-/* 141 */     AndroidUtils.reportDisplayInformation(this);
+/* 136 */     setRequestedOrientation(0);
+/* 137 */     getWindow().addFlags(128);
+/*     */     
+/* 139 */     AndroidUtils.reportDisplayInformation(this);
 /*     */   }
 /*     */ 
 /*     */ 
@@ -158,140 +156,140 @@
 /*     */ 
 /*     */   
 /*     */   protected void onStart() {
-/* 161 */     super.onStart();
+/* 159 */     super.onStart();
 /*     */     
-/* 163 */     Log.i("ARXJ::ARActivity", "onStart(): called");
+/* 161 */     Log.i("ARXJ::ARActivity", "onStart(): called");
 /*     */ 
 /*     */     
-/* 166 */     if (!ARController.getInstance().initialiseNative(getCacheDir().getAbsolutePath())) {
-/* 167 */       notifyFinish("The native ARX library could not be loaded.");
+/* 164 */     if (!ARController.getInstance().initialiseNative(getCacheDir().getAbsolutePath())) {
+/* 165 */       notifyFinish("The native ARX library could not be loaded.");
 /*     */       
 /*     */       return;
 /*     */     } 
-/* 171 */     this.mainLayout = supplyFrameLayout();
-/* 172 */     if (this.mainLayout == null) {
-/* 173 */       Log.e("ARXJ::ARActivity", "onStart(): Error: supplyFrameLayout did not return a layout.");
+/* 169 */     this.mainLayout = supplyFrameLayout();
+/* 170 */     if (this.mainLayout == null) {
+/* 171 */       Log.e("ARXJ::ARActivity", "onStart(): Error: supplyFrameLayout did not return a layout.");
 /*     */       
 /*     */       return;
 /*     */     } 
-/* 177 */     this.renderer = supplyRenderer();
-/* 178 */     if (this.renderer == null) {
-/* 179 */       Log.e("ARXJ::ARActivity", "onStart(): Error: supplyRenderer did not return a renderer.");
-/* 180 */       notifyFinish("You need to supply a renderer. Create your own renderer class (MyArRenderer) and derive it from ARRenderer.");
+/* 175 */     this.renderer = supplyRenderer();
+/* 176 */     if (this.renderer == null) {
+/* 177 */       Log.e("ARXJ::ARActivity", "onStart(): Error: supplyRenderer did not return a renderer.");
+/* 178 */       notifyFinish("You need to supply a renderer. Create your own renderer class (MyArRenderer) and derive it from ARRenderer.");
 /*     */     } 
 /*     */   }
 /*     */ 
 /*     */   
 /*     */   public void onResume() {
-/* 186 */     Log.i("ARXJ::ARActivity", "onResume(): called");
-/* 187 */     super.onResume();
+/* 184 */     Log.i("ARXJ::ARActivity", "onResume(): called");
+/* 185 */     super.onResume();
 /*     */ 
 /*     */     
-/* 190 */     this.mGlView = new GLSurfaceView((Context)this);
+/* 188 */     this.mGlView = new GLSurfaceView((Context)this);
 /*     */     
-/* 192 */     FrameListenerImpl frameListenerImpl = new FrameListenerImpl(this.renderer, this, this.mGlView);
-/* 193 */     CameraEventListenerImpl cameraEventListenerImpl = new CameraEventListenerImpl(this, (FrameListener)frameListenerImpl);
-/* 194 */     this.mCameraAccessHandler = AndroidUtils.createCameraAccessHandler(this, (CameraEventListener)cameraEventListenerImpl);
+/* 190 */     FrameListenerImpl frameListenerImpl = new FrameListenerImpl(this.renderer, this, this.mGlView);
+/* 191 */     CameraEventListenerImpl cameraEventListenerImpl = new CameraEventListenerImpl(this, (FrameListener)frameListenerImpl);
+/* 192 */     this.mCameraAccessHandler = AndroidUtils.createCameraAccessHandler(this, (CameraEventListener)cameraEventListenerImpl);
 /*     */ 
 /*     */     
-/* 197 */     this.mGlView.setEGLContextClientVersion(2);
+/* 195 */     this.mGlView.setEGLContextClientVersion(2);
 /*     */     
-/* 199 */     if (this.renderer != null) {
-/* 200 */       this.mGlView.setRenderer((GLSurfaceView.Renderer)this.renderer);
+/* 197 */     if (this.renderer != null) {
+/* 198 */       this.mGlView.setRenderer((GLSurfaceView.Renderer)this.renderer);
 /*     */     }
 /*     */     
-/* 203 */     this.mGlView.setRenderMode(0);
-/* 204 */     this.mGlView.addOnLayoutChangeListener(new LayoutChangeListenerImpl(this, this.mCameraAccessHandler));
+/* 201 */     this.mGlView.setRenderMode(0);
+/* 202 */     this.mGlView.addOnLayoutChangeListener(new LayoutChangeListenerImpl(this, this.mCameraAccessHandler));
 /*     */     
-/* 206 */     Log.i("ARXJ::ARActivity", "onResume(): GLSurfaceView created");
+/* 204 */     Log.i("ARXJ::ARActivity", "onResume(): GLSurfaceView created");
 /*     */ 
 /*     */     
-/* 209 */     this.mainLayout.addView((View)this.mGlView, new ViewGroup.LayoutParams(-1, -1));
-/* 210 */     Log.i("ARXJ::ARActivity", "onResume(): Views added to main layout.");
-/* 211 */     this.mGlView.onResume();
+/* 207 */     this.mainLayout.addView((View)this.mGlView, new ViewGroup.LayoutParams(-1, -1));
+/* 208 */     Log.i("ARXJ::ARActivity", "onResume(): Views added to main layout.");
+/* 209 */     this.mGlView.onResume();
 /*     */     
-/* 213 */     if (this.mCameraAccessHandler.getCameraAccessPermissions()) {
+/* 211 */     if (this.mCameraAccessHandler.getCameraAccessPermissions()) {
 /*     */       return;
 /*     */     }
 /*     */ 
 /*     */ 
 /*     */     
-/* 219 */     View settingsButtonLayout = getLayoutInflater().inflate(R.layout.settings, (ViewGroup)this.mainLayout, false);
-/* 220 */     this.mConfigButton = (ImageButton)settingsButtonLayout.findViewById(R.id.button_config);
-/* 221 */     this.mainLayout.addView(settingsButtonLayout);
-/* 222 */     this.mConfigButton.setOnClickListener(this);
+/* 217 */     View settingsButtonLayout = getLayoutInflater().inflate(R.layout.settings, (ViewGroup)this.mainLayout, false);
+/* 218 */     this.mConfigButton = (ImageButton)settingsButtonLayout.findViewById(R.id.button_config);
+/* 219 */     this.mainLayout.addView(settingsButtonLayout);
+/* 220 */     this.mConfigButton.setOnClickListener(this);
 /*     */   }
 /*     */ 
 /*     */   
 /*     */   protected void onPause() {
-/* 227 */     Log.i("ARXJ::ARActivity", "onPause(): called");
+/* 225 */     Log.i("ARXJ::ARActivity", "onPause(): called");
 /*     */     
-/* 229 */     this.mCameraAccessHandler.closeCamera();
+/* 227 */     this.mCameraAccessHandler.closeCamera();
 /*     */     
-/* 231 */     if (this.mGlView != null) {
-/* 232 */       this.mGlView.onPause();
-/* 233 */       this.mainLayout.removeView((View)this.mGlView);
+/* 229 */     if (this.mGlView != null) {
+/* 230 */       this.mGlView.onPause();
+/* 231 */       this.mainLayout.removeView((View)this.mGlView);
 /*     */     } 
 /*     */     
-/* 236 */     super.onPause();
+/* 234 */     super.onPause();
 /*     */   }
 /*     */ 
 /*     */   
 /*     */   public void onStop() {
-/* 241 */     Log.i("ARXJ::ARActivity", "onStop(): Activity stopping.");
-/* 242 */     super.onStop();
+/* 239 */     Log.i("ARXJ::ARActivity", "onStop(): Activity stopping.");
+/* 240 */     super.onStop();
 /*     */   }
 /*     */ 
 /*     */   
 /*     */   public boolean onCreateOptionsMenu(Menu menu) {
-/* 247 */     MenuInflater inflater = getMenuInflater();
-/* 248 */     inflater.inflate(R.menu.options, menu);
-/* 249 */     return true;
+/* 245 */     MenuInflater inflater = getMenuInflater();
+/* 246 */     inflater.inflate(R.menu.options, menu);
+/* 247 */     return true;
 /*     */   }
 /*     */ 
 /*     */   
 /*     */   public boolean onOptionsItemSelected(MenuItem item) {
-/* 254 */     if (item.getItemId() == R.id.settings) {
-/* 255 */       startActivity(new Intent((Context)this, CameraPreferencesActivity.class));
-/* 256 */       return true;
+/* 252 */     if (item.getItemId() == R.id.settings) {
+/* 253 */       startActivity(new Intent((Context)this, CameraPreferencesActivity.class));
+/* 254 */       return true;
 /*     */     } 
-/* 258 */     return super.onOptionsItemSelected(item);
+/* 256 */     return super.onOptionsItemSelected(item);
 /*     */   }
 /*     */ 
 /*     */ 
 /*     */ 
 /*     */   
 /*     */   protected void showInfo() {
-/* 265 */     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder((Context)this);
+/* 263 */     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder((Context)this);
 /*     */     
-/* 267 */     dialogBuilder.setMessage("artoolkitX v" + ARX_jni.arwGetARToolKitVersion());
+/* 265 */     dialogBuilder.setMessage("artoolkitX v" + ARX_jni.arwGetARToolKitVersion());
 /*     */     
-/* 269 */     dialogBuilder.setCancelable(false);
-/* 270 */     dialogBuilder.setPositiveButton("Close", new DialogInterface.OnClickListener() {
+/* 267 */     dialogBuilder.setCancelable(false);
+/* 268 */     dialogBuilder.setPositiveButton("Close", new DialogInterface.OnClickListener() {
 /*     */           public void onClick(DialogInterface dialog, int id) {
-/* 272 */             dialog.cancel();
+/* 270 */             dialog.cancel();
 /*     */           }
 /*     */         });
 /*     */     
-/* 276 */     AlertDialog alert = dialogBuilder.create();
-/* 277 */     alert.setTitle("artoolkitX");
-/* 278 */     alert.show();
+/* 274 */     AlertDialog alert = dialogBuilder.create();
+/* 275 */     alert.setTitle("artoolkitX");
+/* 276 */     alert.show();
 /*     */   }
 /*     */ 
 /*     */   
 /*     */   public void onWindowFocusChanged(boolean hasFocus) {
-/* 283 */     super.onWindowFocusChanged(hasFocus);
-/* 284 */     View decorView = getWindow().getDecorView();
-/* 285 */     if (hasFocus)
+/* 281 */     super.onWindowFocusChanged(hasFocus);
+/* 282 */     View decorView = getWindow().getDecorView();
+/* 283 */     if (hasFocus)
 /*     */     {
-/* 287 */       decorView.setSystemUiVisibility(5894);
+/* 285 */       decorView.setSystemUiVisibility(5894);
 /*     */     }
 /*     */   }
 /*     */ 
 /*     */   
 /*     */   public void onClick(View v) {
-/* 293 */     if (v.equals(this.mConfigButton)) {
-/* 294 */       v.getContext().startActivity(new Intent(v.getContext(), CameraPreferencesActivity.class));
+/* 291 */     if (v.equals(this.mConfigButton)) {
+/* 292 */       v.getContext().startActivity(new Intent(v.getContext(), CameraPreferencesActivity.class));
 /*     */     }
 /*     */   }
 /*     */ 
@@ -299,22 +297,22 @@
 /*     */ 
 /*     */   
 /*     */   public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-/* 302 */     Log.i("ARXJ::ARActivity", "onRequestPermissionsResult(): called");
+/* 300 */     Log.i("ARXJ::ARActivity", "onRequestPermissionsResult(): called");
 /*     */     
-/* 304 */     if (requestCode == 0) {
-/* 305 */       if (grantResults[0] != 0) {
-/* 306 */         notifyFinish("Application will not run with camera access denied");
-/* 307 */       } else if (1 <= permissions.length) {
-/* 308 */         Toast.makeText(getApplicationContext(), 
-/* 309 */             String.format("Camera access permission \"%s\" allowed", new Object[] { permissions[0] }), 0)
-/* 310 */           .show();
+/* 302 */     if (requestCode == 0) {
+/* 303 */       if (grantResults[0] != 0) {
+/* 304 */         notifyFinish("Application will not run with camera access denied");
+/* 305 */       } else if (1 <= permissions.length) {
+/* 306 */         Toast.makeText(getApplicationContext(), 
+/* 307 */             String.format("Camera access permission \"%s\" allowed", new Object[] { permissions[0] }), 0)
+/* 308 */           .show();
 /*     */       } 
-/* 312 */       Log.i("ARXJ::ARActivity", "onRequestPermissionsResult(): reset ask for cam access perm");
-/* 313 */       this.mCameraAccessHandler.resetCameraAccessPermissionsFromUser();
+/* 310 */       Log.i("ARXJ::ARActivity", "onRequestPermissionsResult(): reset ask for cam access perm");
+/* 311 */       this.mCameraAccessHandler.resetCameraAccessPermissionsFromUser();
 /*     */     } else {
-/* 315 */       super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+/* 313 */       super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 /*     */     } 
-/* 317 */     onStart();
+/* 315 */     onStart();
 /*     */   }
 /*     */ 
 /*     */ 
@@ -324,30 +322,30 @@
 /*     */ 
 /*     */   
 /*     */   public GLSurfaceView getGLView() {
-/* 327 */     return this.mGlView;
+/* 325 */     return this.mGlView;
 /*     */   }
 /*     */ 
 /*     */   
 /*     */   public ARRenderer getRenderer() {
-/* 332 */     return this.renderer;
+/* 330 */     return this.renderer;
 /*     */   }
 /*     */   
 /*     */   private void notifyFinish(String errorMessage) {
-/* 336 */     (new AlertDialog.Builder((Context)this))
-/* 337 */       .setMessage(errorMessage)
-/* 338 */       .setTitle("Error")
-/* 339 */       .setCancelable(true)
-/* 340 */       .setNeutralButton(17039370, new DialogInterface.OnClickListener()
+/* 334 */     (new AlertDialog.Builder((Context)this))
+/* 335 */       .setMessage(errorMessage)
+/* 336 */       .setTitle("Error")
+/* 337 */       .setCancelable(true)
+/* 338 */       .setNeutralButton(17039370, new DialogInterface.OnClickListener()
 /*     */         {
 /*     */           public void onClick(DialogInterface dialog, int whichButton) {
-/* 343 */             ARActivity.this.finish();
+/* 341 */             ARActivity.this.finish();
 /*     */           }
-/* 346 */         }).show();
+/* 344 */         }).show();
 /*     */   }
 /*     */ }
 
 
-/* Location:              C:\Users\ms\Desktop\新建文件夹\120\arxjUnity.jar!\org\artoolkitx\arx\arxj\ARActivity.class
- * Java compiler version: 8 (52.0)
+/* Location:              C:\Users\ms\Desktop\新建文件夹\KYSHIYONG\arxjUnity.jar!\org\artoolkitx\arx\arxj\ARActivity.class
+ * Java compiler version: 7 (51.0)
  * JD-Core Version:       1.1.3
  */
